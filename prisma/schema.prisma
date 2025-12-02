@@ -1,0 +1,53 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  name          String?
+  subscriptions Subscription[]
+}
+
+// Por ejemplo: 30, 90, 365 días
+model Plan {
+  id            String         @id @default(uuid())
+  name          String
+  cost          Float
+  durationDays  Int            
+  subscriptions Subscription[]
+}
+
+// status: 'trial', 'active', 'suspended', 'cancelled'
+model Subscription {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  planId        String
+  plan          Plan     @relation(fields: [planId], references: [id])
+  startDate     DateTime @default(now())
+  endDate       DateTime 
+  status        String   
+  payments      Payment[]
+}
+
+// 'completed', 'failed', 'pending'
+model Payment {
+  id            String       @id @default(uuid())
+  subscriptionId String
+  subscription  Subscription @relation(fields: [subscriptionId], references: [id])
+  amount        Float
+  paymentDate   DateTime   @default(now())
+  status        String     
+}
