@@ -31,14 +31,15 @@ class SubscriptionController {
   }
 
   async listSubscriptions(req, res) {
-    // Obtiene parámetros de consulta (query) con valores por defecto
-    const { page, limit, status } = req.query;
+    const { page, limit, status, startDateFrom, startDateTo } = req.query;
 
     try {
       const result = await subscriptionService.getSubscriptions(
         page,
         limit,
-        status
+        status,
+        startDateFrom, 
+        startDateTo
       );
 
       res.status(200).json(result);

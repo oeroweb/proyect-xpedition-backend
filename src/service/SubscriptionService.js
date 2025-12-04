@@ -3,14 +3,7 @@ import PlanRepository from "../repository/PlanRepository.js";
 import UserRepository from "../repository/UserRepository.js";
 import { addDays } from "../utils/date.utils.js";
 import { SUBSCRIPTION_STATUS } from "../domain/subscription.constants.js";
-
-// Usaremos un error simple por ahora, se mejorará en Fase 4
-class BusinessRuleError extends Error {
-  constructor(message, statusCode = 400) {
-    super(message);
-    this.statusCode = statusCode;
-  }
-}
+import { BusinessRuleError } from "../domain/errors/BusinessRuleError.js";
 
 export default class SubscriptionService {
   constructor() {
@@ -20,7 +13,6 @@ export default class SubscriptionService {
   }
 
   async createSubscription(userId, planId) {
-    // 1. Verificar existencia de Plan y Usuario
     const plan = await this.planRepository.findById(planId);
     if (!plan) {
       throw new BusinessRuleError("Plan no encontrado.", 404);
@@ -35,7 +27,16 @@ export default class SubscriptionService {
     if (existingActiveSub) {
       throw new BusinessRuleError(
         "El usuario ya tiene una suscripción activa o en periodo de prueba para este plan.",
-        409 // Conflict
+        409
+      );
+    }
+
+    const existingSubscription =
+      await this.subRepository.findActiveByUserIdAndPlanId(userId, planId);
+    if (existingSubscription) {
+      throw new BusinessRuleError(
+        "El usuario ya tiene una suscripción activa o en periodo de prueba para este plan.",
+        409
       );
     }
 
@@ -53,19 +54,22 @@ export default class SubscriptionService {
     return this.subRepository.create(newSubscriptionData);
   }
 
-  // Aquí iría la lógica de cancelación (Fase 3/4)
   async cancelSubscription(id) {
     const subscription = await this.subRepository.findById(id);
     if (!subscription) {
       throw new BusinessRuleError("Suscripción no encontrada.", 404);
     }
 
-    // --- REGLA: Cancelación efectiva al fin del periodo ---
-    // Se actualiza el estado a 'cancelled', pero la suscripción sigue activa hasta endDate.
     return this.subRepository.updateStatus(id, SUBSCRIPTION_STATUS.CANCELLED);
   }
 
-  async getSubscriptions(page = 1, limit = 10, status) {
+  async getSubscriptions(
+    page = 1,
+    limit = 10,
+    status,
+    startDateFrom,
+    startDateTo
+  ) {
     const pageNumber = parseInt(page) || 1;
     const limitNumber = parseInt(limit) || 10;
     const skip = (pageNumber - 1) * limitNumber;
@@ -83,6 +87,32 @@ export default class SubscriptionService {
       }
     }
 
+    let dateFilter = {};
+
+    if (startDateFrom) {
+      const dateFrom = new Date(startDateFrom);
+      if (isNaN(dateFrom))
+        throw new BusinessRuleError(
+          "Formato de fecha de inicio (desde) inválido.",
+          400
+        );
+      dateFilter.gte = dateFrom;
+    }
+
+    if (startDateTo) {
+      const dateTo = new Date(startDateTo);
+      if (isNaN(dateTo))
+        throw new BusinessRuleError(
+          "Formato de fecha de inicio (hasta) inválido.",
+          400
+        );
+      dateFilter.lte = dateTo;
+    }
+
+    if (Object.keys(dateFilter).length > 0) {
+      where.startDate = dateFilter;
+    }
+
     const { data, total } =
       await this.subRepository.findWithPaginationAndFilter(
         skip,
@@ -92,7 +122,7 @@ export default class SubscriptionService {
 
     return {
       data,
-      meta: {
+      pagination: {
         total,
         page: pageNumber,
         limit: limitNumber,

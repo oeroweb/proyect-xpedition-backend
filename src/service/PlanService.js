@@ -6,12 +6,10 @@ export default class PlanService {
   }
 
   async getAllPlans() {
-    // Aquí iría la lógica de negocio (filtrado, permisos), pero por ahora solo delega.
     return this.repository.findAll();
   }
 
   async createPlan(data) {
-    // Ejemplo de validación o regla de negocio aquí.
     if (data.cost <= 0) {
       throw new Error("El costo debe ser positivo.");
     }
@@ -19,7 +17,6 @@ export default class PlanService {
   }
 
   async updatePlan(id, data) {
-    // Aquí podrías añadir una regla, como: si un plan está activo, no se puede cambiar el costo.
     if (data.cost && data.cost <= 0) {
       throw new Error("El costo debe ser positivo.");
     }
@@ -27,7 +24,6 @@ export default class PlanService {
   }
 
   async deletePlan(id) {
-    // Aquí podrías añadir una regla clave: No se puede eliminar si hay suscripciones activas.
     return this.repository.delete(id);
   }
 }

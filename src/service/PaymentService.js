@@ -11,10 +11,6 @@ export default class PaymentService {
     this.planRepository = new PlanRepository();
   }
 
-  // Asegúrate de que los imports estén correctos al inicio del archivo:
-  // import { addDays } from '../utils/date.utils.js';
-  // import { SUBSCRIPTION_STATUS } from '../domain/subscription.constants.js';
-
   async processPayment(subscriptionId, amount) {
     const subscription = await this.subRepository.findById(subscriptionId);
     if (!subscription) {
@@ -23,7 +19,7 @@ export default class PaymentService {
 
     const plan = await this.planRepository.findById(subscription.planId);
     if (!plan) {
-      throw new Error("Plan asociado no encontrado.", 500);
+      throw new Error("Plan asociado no encontrado.", 404);
     }
 
     const paymentData = {
