@@ -1,4 +1,4 @@
-import UserRepository from "../repository/UserRepository.js";
+import UserRepository from '../repository/UserRepository.js';
 
 class BusinessRuleError extends Error {
   constructor(message, statusCode = 400) {
@@ -13,19 +13,19 @@ export default class UserService {
   }
 
   async getAllUsers() {
-    return this.repository.findAll();
+    return await this.repository.findAll();
   }
 
   async getUserById(id) {
     const user = await this.repository.findById(id);
     if (!user) {
-      throw new BusinessRuleError("Usuario no encontrado.", 404);
+      throw new BusinessRuleError('Usuario no encontrado.', 404);
     }
     return user;
   }
 
   async createUser(data) {
-    return this.repository.create(data);
+    return await this.repository.create(data);
   }
 
   async updateUser(id, data) {

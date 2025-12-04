@@ -13,6 +13,6 @@ export const createUserSchema = Joi.object({
 });
 
 export const updateUserSchema = Joi.object({
-  email: Joi.string().email(),  
+  email: Joi.string().email(),
   name: Joi.string().min(3).max(100),
 }).min(1);

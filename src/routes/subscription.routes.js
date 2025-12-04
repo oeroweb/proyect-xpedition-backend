@@ -5,9 +5,9 @@ import { createSubscriptionSchema } from '../domain/schemas/subscription.schema.
 
 const router = Router();
 
-router.get('/', SubscriptionController.listSubscriptions); 
+router.get('/', SubscriptionController.listSubscriptions);
 
-router.post('/', validateBody(createSubscriptionSchema),  SubscriptionController.createSubscription);
-router.post('/:id/cancel', SubscriptionController.cancelSubscription); 
+router.post('/', validateBody(createSubscriptionSchema), SubscriptionController.createSubscription);
+router.post('/:id/cancel', SubscriptionController.cancelSubscription);
 
 export default router;

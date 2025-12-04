@@ -1,5 +1,5 @@
-import { PrismaClient } from "@prisma/client";
-import { SUBSCRIPTION_STATUS } from "../domain/subscription.constants.js";
+import { PrismaClient } from '@prisma/client';
+import { SUBSCRIPTION_STATUS } from '../domain/subscription.constants.js';
 
 const prisma = new PrismaClient();
 
@@ -46,7 +46,7 @@ export default class SubscriptionRepository {
       take: take,
       where: where,
       orderBy: {
-        startDate: "desc",
+        startDate: 'desc',
       },
       include: {
         plan: true,

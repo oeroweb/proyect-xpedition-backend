@@ -1,4 +1,4 @@
-import SubscriptionService from "../service/SubscriptionService.js";
+import SubscriptionService from '../service/SubscriptionService.js';
 
 const subscriptionService = new SubscriptionService();
 class SubscriptionController {
@@ -6,10 +6,7 @@ class SubscriptionController {
     const { userId, planId } = req.body;
 
     try {
-      const newSubscription = await subscriptionService.createSubscription(
-        userId,
-        planId
-      );
+      const newSubscription = await subscriptionService.createSubscription(userId, planId);
       res.status(201).json(newSubscription);
     } catch (error) {
       const statusCode = error.statusCode || 500;
@@ -22,7 +19,7 @@ class SubscriptionController {
     try {
       const cancelledSub = await subscriptionService.cancelSubscription(id);
       res.status(200).json({
-        message: "Cancelación registrada, efectiva al final del periodo.",
+        message: 'Cancelación registrada, efectiva al final del periodo.',
       });
     } catch (error) {
       const statusCode = error.statusCode || 500;
@@ -38,8 +35,8 @@ class SubscriptionController {
         page,
         limit,
         status,
-        startDateFrom, 
-        startDateTo
+        startDateFrom,
+        startDateTo,
       );
 
       res.status(200).json(result);

@@ -1,8 +1,8 @@
-import PaymentRepository from "../repository/PaymentRepository.js";
-import SubscriptionRepository from "../repository/SubscriptionRepository.js";
-import PlanRepository from "../repository/PlanRepository.js";
-import { SUBSCRIPTION_STATUS } from "../domain/subscription.constants.js";
-import { addDays } from "../utils/date.utils.js";
+import PaymentRepository from '../repository/PaymentRepository.js';
+import SubscriptionRepository from '../repository/SubscriptionRepository.js';
+import PlanRepository from '../repository/PlanRepository.js';
+import { SUBSCRIPTION_STATUS } from '../domain/subscription.constants.js';
+import { addDays } from '../utils/date.utils.js';
 
 export default class PaymentService {
   constructor() {
@@ -14,18 +14,18 @@ export default class PaymentService {
   async processPayment(subscriptionId, amount) {
     const subscription = await this.subRepository.findById(subscriptionId);
     if (!subscription) {
-      throw new Error("Suscripción no encontrada.", 404);
+      throw new Error('Suscripción no encontrada.', 404);
     }
 
     const plan = await this.planRepository.findById(subscription.planId);
     if (!plan) {
-      throw new Error("Plan asociado no encontrado.", 404);
+      throw new Error('Plan asociado no encontrado.', 404);
     }
 
     const paymentData = {
       subscriptionId,
       amount,
-      status: "completed",
+      status: 'completed',
     };
     const newPayment = await this.payRepository.create(paymentData);
 
@@ -40,5 +40,4 @@ export default class PaymentService {
 
     return newPayment;
   }
- 
 }

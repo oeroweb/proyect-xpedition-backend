@@ -1,4 +1,4 @@
-import UserService from "../service/UserService.js";
+import UserService from '../service/UserService.js';
 
 const userService = new UserService();
 
@@ -8,7 +8,7 @@ class UserController {
       const users = await userService.getAllUsers();
       res.status(200).json(users);
     } catch (error) {
-      res.status(500).json({ message: "Error interno: " + error.message });
+      res.status(500).json({ message: 'Error interno: ' + error.message });
     }
   }
 
