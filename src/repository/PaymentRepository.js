@@ -4,6 +4,6 @@ const prisma = new PrismaClient();
 
 export default class PaymentRepository {
   async create(data) {
-    return prisma.payment.create({ data });
+    return await prisma.payment.create({ data });
   }
 }

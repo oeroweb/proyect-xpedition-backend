@@ -5,14 +5,8 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('Iniciando seed...');
 
-  // 1. Limpiar la base de datos (opcional, pero buena práctica)
-  // await prisma.subscription.deleteMany();
-  // await prisma.user.deleteMany();
-  // await prisma.plan.deleteMany();
 
-  // 2. Crear un Plan (por si no lo has creado por API)
   const basicPlan = await prisma.plan.create({
     data: {
       name: 'Plan Básico',
@@ -21,7 +15,6 @@ async function main() {
     },
   });
 
-  // 3. Crear un Usuario de prueba
   const testUser = await prisma.user.create({
     data: {
       email: 'usuario.prueba@example.com',

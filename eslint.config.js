@@ -26,7 +26,6 @@ export default [
   {
     files: ['__tests__/**/*.js'],
     languageOptions: {
-      // Define variables globales de Jest
       globals: {
         ...globals.jest,
         ...globals.node,

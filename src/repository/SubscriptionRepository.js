@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 export default class SubscriptionRepository {
   async findActiveByUserIdAndPlanId(userId, planId) {
-    return prisma.subscription.findFirst({
+    return await prisma.subscription.findFirst({
       where: {
         userId,
         planId,
@@ -17,24 +17,24 @@ export default class SubscriptionRepository {
   }
 
   async findById(id) {
-    return prisma.subscription.findUnique({
+    return await prisma.subscription.findUnique({
       where: { id },
     });
   }
 
   async create(data) {
-    return prisma.subscription.create({ data });
+    return await prisma.subscription.create({ data });
   }
 
   async updateStatus(id, newStatus) {
-    return prisma.subscription.update({
+    return await prisma.subscription.update({
       where: { id },
       data: { status: newStatus },
     });
   }
 
   async updateEndDate(id, newEndDate) {
-    return prisma.subscription.update({
+    return await prisma.subscription.update({
       where: { id },
       data: { endDate: newEndDate },
     });
@@ -64,7 +64,7 @@ export default class SubscriptionRepository {
   async findExpiredActiveSubscriptions() {
     const today = new Date();
 
-    return prisma.subscription.findMany({
+    return await prisma.subscription.findMany({
       where: {
         status: SUBSCRIPTION_STATUS.ACTIVE,
         endDate: {

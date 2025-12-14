@@ -6,24 +6,24 @@ export default class PlanService {
   }
 
   async getAllPlans() {
-    return this.repository.findAll();
+    return await this.repository.findAll();
   }
 
   async createPlan(data) {
     if (data.cost <= 0) {
       throw new Error('El costo debe ser positivo.');
     }
-    return this.repository.create(data);
+    return await this.repository.create(data);
   }
 
   async updatePlan(id, data) {
     if (data.cost && data.cost <= 0) {
       throw new Error('El costo debe ser positivo.');
     }
-    return this.repository.update(id, data);
+    return await this.repository.update(id, data);
   }
 
   async deletePlan(id) {
-    return this.repository.delete(id);
+    return await this.repository.delete(id);
   }
 }

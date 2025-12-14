@@ -13,7 +13,7 @@ class PlanController {
   }
 
   async createPlan(req, res) {
-    const { name, cost, durationDays } = req.body;
+    const { name, cost } = req.body;
 
     if (!name || cost === undefined) {
       return res.status(400).json({ message: 'Datos incompletos' });
@@ -42,7 +42,7 @@ class PlanController {
     try {
       await planService.deletePlan(id);
       res.status(204).send();
-    } catch (error) {
+    } catch () {
       res.status(404).json({ message: 'Plan no encontrado o no se puede eliminar.' });
     }
   }

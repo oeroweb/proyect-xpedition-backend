@@ -4,30 +4,30 @@ const prisma = new PrismaClient();
 
 export default class PlanRepository {
   async findAll() {
-    return prisma.plan.findMany();
+    return await prisma.plan.findMany();
   }
 
   async findById(id) {
-    return prisma.plan.findUnique({
+    return await prisma.plan.findUnique({
       where: { id },
     });
   }
 
   async create(data) {
-    return prisma.plan.create({
+    return await prisma.plan.create({
       data: data,
     });
   }
 
   async update(id, data) {
-    return prisma.plan.update({
+    return await prisma.plan.update({
       where: { id },
       data: data,
     });
   }
 
   async delete(id) {
-    return prisma.plan.delete({
+    return await prisma.plan.delete({
       where: { id },
     });
   }
