@@ -5,8 +5,6 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-
-
   const basicPlan = await prisma.plan.create({
     data: {
       name: 'Plan Básico',

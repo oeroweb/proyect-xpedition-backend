@@ -42,7 +42,7 @@ class PlanController {
     try {
       await planService.deletePlan(id);
       res.status(204).send();
-    } catch () {
+    } catch (error) {
       res.status(404).json({ message: 'Plan no encontrado o no se puede eliminar.' });
     }
   }

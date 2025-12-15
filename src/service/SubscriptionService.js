@@ -128,4 +128,37 @@ export default class SubscriptionService {
 
     return { suspendedCount };
   }
+
+  async updateSubscription(subscriptionId, newStatus, newPlanId) {
+    const subscription = await this.subRepository.findById(subscriptionId);
+    if (!subscription) {
+      throw new BusinessRuleError('Suscripción no encontrada.', 404);
+    }
+
+    const updateData = {};
+
+    if (newStatus) {
+      if (!Object.values(SUBSCRIPTION_STATUS).includes(newStatus)) {
+        throw new BusinessRuleError(`El estado '${newStatus}' no es un estado válido.`, 400);
+      }
+      updateData.status = newStatus;
+    }
+
+    if (newPlanId && newPlanId !== subscription.planId) {
+      const newPlan = await this.planRepository.findById(newPlanId);
+      if (!newPlan) {
+        throw new BusinessRuleError('El nuevo plan no fue encontrado.', 404);
+      }
+
+      updateData.planId = newPlanId;
+    }
+
+    if (Object.keys(updateData).length === 0) {
+      return subscription;
+    }
+
+    const updatedSubscription = await this.subRepository.update(subscriptionId, updateData);
+
+    return updatedSubscription;
+  }
 }

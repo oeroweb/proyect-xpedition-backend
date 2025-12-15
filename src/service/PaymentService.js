@@ -3,6 +3,8 @@ import SubscriptionRepository from '../repository/SubscriptionRepository.js';
 import PlanRepository from '../repository/PlanRepository.js';
 import { SUBSCRIPTION_STATUS } from '../domain/subscription.constants.js';
 import { addDays } from '../utils/date.utils.js';
+import { PAYMENT_STATUS } from '../domain/payment.constants.js';
+import { BusinessRuleError } from '../domain/errors/BusinessRuleError.js';
 
 export default class PaymentService {
   constructor() {
@@ -39,5 +41,20 @@ export default class PaymentService {
     await this.subRepository.updateEndDate(subscriptionId, newEndDate);
 
     return newPayment;
+  }
+
+  async updatePaymentStatus(paymentId, newStatus) {
+    const payment = await this.payRepository.findById(paymentId);
+    if (!payment) {
+      throw new BusinessRuleError('Pago no encontrado.', 404);
+    }
+
+    if (!Object.values(PAYMENT_STATUS).includes(newStatus)) {
+      throw new BusinessRuleError(`El estado '${newStatus}' no es un estado de pago válido.`, 400);
+    }
+
+    const updatedPayment = await this.payRepository.updateStatus(paymentId, newStatus);
+
+    return updatedPayment;
   }
 }

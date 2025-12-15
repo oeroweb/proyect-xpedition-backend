@@ -1,5 +1,3 @@
-import Joi from 'joi';
-
 export class ValidationError extends Error {
   constructor(message) {
     super(message);

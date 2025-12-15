@@ -73,4 +73,11 @@ export default class SubscriptionRepository {
       },
     });
   }
+
+  async update(id, data) {
+    return await prisma.subscription.update({
+      where: { id },
+      data: data,
+    });
+  }
 }

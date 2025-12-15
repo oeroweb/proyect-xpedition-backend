@@ -10,7 +10,7 @@ Diseño e implementación de una API REST para gestionar suscripciones de planes
 * Docker y Docker Compose (para PostgreSQL)
 
 ### Pasos
-1.  **Clonar Repositorio:** `git clone ......`
+1.  **Clonar Repositorio:** `git clone https://github.com/oeroweb/proyect-xpedition-backend.git`
 2.  **Instalar Dependencias:** `npm install`
 3.  **Configurar DB (Docker Compose):**
     ```bash
@@ -31,10 +31,6 @@ Diseño e implementación de una API REST para gestionar suscripciones de planes
 | `npm run seed` | Llena la base de datos con datos de prueba (Planes, Usuarios).
 | `npm run coverage` | Genera el reporte de cobertura en `/coverage`.
 
-## 4. 🔀 Diagrama Entidad-Relación (ER)
-[Aquí deberías incluir una imagen o un diagrama simple de tus modelos: User, Plan, Subscription, Payment.] 
-
-[Image of simple Entity-Relationship Diagram for subscriptions]
 
 
 ## 5. 💡 Decisiones de Diseño y Arquitectura
@@ -46,7 +42,7 @@ Implementamos la arquitectura (`Controller` → `Service` → `Repository` → `
 * **Repository:** Interface Segregation (ISP) en la interacción con el ORM (Prisma).
 
 ### 5.2. Persistencia y Migraciones
-* Decisión:** Se eligió **Prisma** como ORM por su tipado estricto y su CLI robusto para manejar migraciones y el *seeding*.
+* Se eligió **Prisma** como ORM por su tipado estricto y su CLI robusto para manejar migraciones y el *seeding*.
 
 ### 5.3. Manejo de Errores
 Se implementó un *middleware* centralizado para capturar errores lanzados por el `Service` (ej: `ConflictError` 409) y traducirlos a respuestas HTTP correctas.
@@ -66,7 +62,7 @@ La colección debe incluir las siguientes carpetas/peticiones:
 | **Usuarios** | `POST` | `/users` | Crear Usuario (Necesario para Subscription) |
 | **Suscripciones** | `POST` | `/subscriptions` | **Crear Subscription:** Incluye `userId` y `planId`. Prueba que inicie en `trial` y verifica la regla de no duplicidad. |
 | **Pagos** | `POST` | `/payments` | **Registrar Payment:** Simula un pago para una `Subscription` en estado `trial` y verifica que el estado cambie a `active`. |
-| **Listados** | `GET` | `/subscriptions?status=active&page=1` | **Listados Paginados + Filtro** por estado. |
+| **Listados de Suscripciones** | `GET` | `/subscriptions?status=active&page=1` | **Listados Paginados + Filtro** por estado. |
 
 ---
 
@@ -83,15 +79,3 @@ Este entregable es **obligatorio**. Debe ser un documento (`.md` o `.xlsx`) que 
 
 ---
 
-### 4. 🎤 Preparación para la Presentación
-
-La presentación tiene una duración de 10-15 minutos.
-
-| Tópico | Enfoque (Nivel Junior) |
-| :--- | :--- |
-| **Arquitectura** | Explica las 4 capas y cómo aplicaste el principio SRP (Single Responsibility Principle) en cada una. |
-| **Decisiones** | Justifica el uso de Prisma y cómo el *middleware* de errores centralizado mejora la DX (Developer Experience). |
-| **Demo Rápida** | Muestra el `docker-compose up` y el `npm run seed`. Luego, usa tu Colección REST para mostrar la **creación exitosa de un Plan** y la **prueba de la Regla de Duplicidad** para una `Subscription`. |
-| **Aprendizajes** | Menciona cómo la aplicación de SOLID te ayudó a separar la lógica de negocio (Service) de la persistencia (Repository). |
-
-¡Con esto, has cubierto todos los pasos técnicos y de entregables del proyecto! 

@@ -8,6 +8,7 @@ const router = Router();
 router.get('/', SubscriptionController.listSubscriptions);
 
 router.post('/', validateBody(createSubscriptionSchema), SubscriptionController.createSubscription);
+router.put('/:id', SubscriptionController.updateSubscription);
 router.post('/:id/cancel', SubscriptionController.cancelSubscription);
 
 export default router;

@@ -45,6 +45,23 @@ class SubscriptionController {
       res.status(statusCode).json({ message: error.message });
     }
   }
+
+  async updateSubscription(req, res) {
+    const { id } = req.params;
+    const { status, planId } = req.body;
+
+    if (!status && !planId) {
+      return res.status(400).json({ message: 'Se requiere el campo "status" y/o "planId".' });
+    }
+
+    try {
+      const result = await subscriptionService.updateSubscription(id, status, planId);
+      res.status(200).json(result);
+    } catch (error) {
+      const statusCode = error.statusCode || 500;
+      res.status(statusCode).json({ message: error.message });
+    }
+  }
 }
 
 export default new SubscriptionController();
